@@ -15,12 +15,17 @@ class Particle {
     this.originalY = y;
     this.timer = 0;
     this.maxTimer = Math.random() * 50 + 50;
+    this.color = `hsl(${Math.random() * 360}, 100%, 50%)`;
   }
 
   draw() {
+    const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
+    gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+    gradient.addColorStop(1, `rgba(255, 255, 255, 0)`);
+    
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    ctx.fillStyle = 'red';
+    ctx.fillStyle = this.color;
     ctx.fill();
   }
 
@@ -55,3 +60,4 @@ function animate() {
 
 init();
 animate();
+                            
