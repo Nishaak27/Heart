@@ -7,12 +7,14 @@ canvas.height = window.innerHeight;
 let particles = [];
 
 class Particle {
-  constructor() {
-    this.x = Math.random() * canvas.width;
-    this.y = Math.random() * canvas.height;
-    this.vx = Math.random() * 4 - 2;
-    this.vy = Math.random() * 4 - 2;
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
     this.size = Math.random() * 2 + 1;
+    this.originalX = x;
+    this.originalY = y;
+    this.timer = 0;
+    this.maxTimer = Math.random() * 50 + 50;
   }
 
   draw() {
@@ -23,20 +25,22 @@ class Particle {
   }
 
   update() {
-    this.x += this.vx;
-    this.y += this.vy;
-    if (this.x < 0 || this.x > canvas.width) {
-      this.vx *= -1;
-    }
-    if (this.y < 0 || this.y > canvas.height) {
-      this.vy *= -1;
-    }
+    this.timer++;
+    this.x = this.originalX + Math.sin(this.timer / this.maxTimer * Math.PI * 2) * 5;
+    this.y = this.originalY + Math.cos(this.timer / this.maxTimer * Math.PI * 2) * 5;
   }
 }
 
 function init() {
-  for (let i = 0; i < 1000; i++) {
-    particles.push(new Particle());
+  const heartSize = 100;
+  const scale = 0.03;
+  const offsetX = canvas.width / 2;
+  const offsetY = canvas.height / 2 - heartSize * scale;
+
+  for (let angle = 0; angle <= Math.PI * 2; angle += 0.01) {
+    const x = heartSize * (16 * Math.pow(Math.sin(angle), 3)) * scale + offsetX;
+    const y = -heartSize * (13 * Math.cos(angle) - 5 * Math.cos(2 * angle) - 2 * Math.cos(3 * angle) - Math.cos(4 * angle)) * scale + offsetY;
+    particles.push(new Particle(x, y));
   }
 }
 
